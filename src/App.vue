@@ -21,14 +21,19 @@ import NoteCard from './components/NoteCard.vue'
     <div class="grid grid-cols-3 auto-rows-[250px] gap-6">
       <NewNoteCard />
 
-      <NoteCard historic="há 2 dias">
-        O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where... <br /> <br />
-        Na aplicação React vamos criar um projeto que permite o usuário salvar notas em texto ou áudio.
-      </NoteCard>
+      <NoteCard 
+        :note="{
+          date: new Date,
+          content: 'O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where...'
+        }" 
+      />
 
-      <NoteCard historic="há 4 dias">
-        No app do NLW vamos criar um layout incrível, assim podemos entregar a melhor experiência para a comunidade. 
-      </NoteCard>
+      <NoteCard 
+        :note="{
+          date: new Date,
+          content: 'No app do NLW vamos criar um layout incrível, assim podemos entregar a melhor experiência para a comunidade.'
+        }" 
+      />
     </div>
   </div>
 </template>
