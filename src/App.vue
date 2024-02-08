@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import logo from './assets/logo-nlw.svg'
+import NoteCard from './components/NoteCard.vue'
 </script>
 
 <template>
@@ -23,22 +24,14 @@ import logo from './assets/logo-nlw.svg'
         <p class="text-sm leading-6 text-slate-400">Grave uma nota em áudio que será convertida para texto automaticamente.</p>
       </div>
 
-      <div class="rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative ">
-        <span class="text-sm font-medium text-slate-300">há 2 dias</span>
-        <p class="text-sm leading-6 text-slate-400">O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where...</p>
+      <NoteCard historic="há 2 dias">
+        O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where... <br /> <br />
+        Na aplicação React vamos criar um projeto que permite o usuário salvar notas em texto ou áudio.
+      </NoteCard>
 
-        <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
-      </div>
-
-      <div class="rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative ">
-        <span class="text-sm font-medium text-slate-300">há 4 dias</span>
-        <p class="text-sm leading-6 text-slate-400">
-          No app do NLW vamos criar um layout incrível, assim podemos entregar a melhor experiência para a comunidade. <br /> <br />
-          Na aplicação React vamos criar um projeto que permite o usuário salvar notas em texto ou áudio.
-        </p>
-
-        <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
-      </div>
+      <NoteCard historic="há 4 dias">
+        No app do NLW vamos criar um layout incrível, assim podemos entregar a melhor experiência para a comunidade. 
+      </NoteCard>
     </div>
   </div>
 </template>
