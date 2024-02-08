@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+
 import {
   DialogRoot,
   DialogTrigger,
@@ -15,13 +18,19 @@ interface NoteCardProps {
 }
 
 const { note } = defineProps<NoteCardProps>()
+const dateConfig = { locale: ptBR, addSuffix: true }
 </script>
 
 <template>
     <DialogRoot>
         <DialogTrigger class="text-left rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-            <span class="text-sm font-medium text-slate-300">{{ note.date.toISOString() }}</span>
-            <p class="text-sm leading-6 text-slate-400 h-full">{{ note.content }}</p>
+            <span class="text-sm font-medium text-slate-300">
+                {{ formatDistanceToNow(note.date, dateConfig) }}
+            </span>
+
+            <p class="text-sm leading-6 text-slate-400 h-full">
+                {{ note.content }}
+            </p>
     
             <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
         </DialogTrigger>
@@ -31,8 +40,13 @@ const { note } = defineProps<NoteCardProps>()
 
             <DialogContent class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-[640px] h-[60vh] w-full bg-slate-700 rounded-md flex flex-col outline-none">
                 <div class="flex flex-1 flex-col gap-3 p-5">
-                    <span class="text-sm font-medium text-slate-300">{{ note.date.toISOString() }}</span>
-                    <p class="text-sm leading-6 text-slate-400 h-full">{{ note.content }}</p>
+                    <span class="text-sm font-medium text-slate-300">
+                        {{ formatDistanceToNow(note.date, dateConfig) }}
+                    </span>
+                    
+                    <p class="text-sm leading-6 text-slate-400 h-full">
+                        {{ note.content }}
+                    </p>
                 </div>
             </DialogContent>
         </DialogPortal>
