@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import logo from './assets/logo-nlw.svg'
+import NewNoteCard from './components/NewNoteCard.vue'
 import NoteCard from './components/NoteCard.vue'
 </script>
 
@@ -18,11 +19,7 @@ import NoteCard from './components/NoteCard.vue'
     <div class="h-px bg-slate-700" />
 
     <div class="grid grid-cols-3 auto-rows-[250px] gap-6">
-
-      <div class="rounded-md bg-slate-700 p-5 space-y-3 overflow-hidden relative ">
-        <span class="text-sm font-medium text-slate-200">Adicionar nota</span>
-        <p class="text-sm leading-6 text-slate-400">Grave uma nota em áudio que será convertida para texto automaticamente.</p>
-      </div>
+      <NewNoteCard />
 
       <NoteCard historic="há 2 dias">
         O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where... <br /> <br />
