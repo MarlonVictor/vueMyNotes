@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { X } from 'lucide-vue-next'
 
 import {
   DialogRoot,
   DialogTrigger,
   DialogPortal,
   DialogOverlay,
-  DialogContent
+  DialogContent,
+  DialogClose
 } from 'radix-vue'
 
 interface NoteCardProps {
@@ -38,7 +40,11 @@ const dateConfig = { locale: ptBR, addSuffix: true }
         <DialogPortal>
             <DialogOverlay class="inset-0 fixed bg-black/50" />
 
-            <DialogContent class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-[640px] h-[60vh] w-full bg-slate-700 rounded-md flex flex-col outline-none">
+            <DialogContent class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-[640px] h-[60vh] w-full bg-slate-700 rounded-md flex flex-col outline-none overflow-hidden">
+                <DialogClose class="absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 rounded-bl-md hover:text-slate-100">
+                    <X class="size-5" />
+                </DialogClose>
+
                 <div class="flex flex-1 flex-col gap-3 p-5">
                     <span class="text-sm font-medium text-slate-300">
                         {{ formatDistanceToNow(note.date, dateConfig) }}
@@ -48,6 +54,13 @@ const dateConfig = { locale: ptBR, addSuffix: true }
                         {{ note.content }}
                     </p>
                 </div>
+
+                <button 
+                    type="button"
+                    class="w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group"
+                >
+                    Deseja <span class="text-red-400 group-hover:underline">apagar essa nota</span>?
+                </button>
             </DialogContent>
         </DialogPortal>
     </DialogRoot>
