@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { X } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 
 import { 
   DialogClose, 
@@ -31,6 +32,7 @@ const handleSaveNote = (event: any) => {
     event.preventDefault()
 
     console.log(content.value)
+    toast.success('Nota criada com sucesso!')
 }
 </script>
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Toaster } from 'vue-sonner'
+
 import logo from './assets/logo-nlw.svg'
 import NewNoteCard from './components/NewNoteCard.vue'
 import NoteCard from './components/NoteCard.vue'
@@ -28,12 +30,7 @@ import NoteCard from './components/NoteCard.vue'
         }" 
       />
 
-      <!-- <NoteCard 
-        :note="{
-          date: new Date,
-          content: 'No app do NLW vamos criar um layout incrível, assim podemos entregar a melhor experiência para a comunidade.'
-        }" 
-      /> -->
+      <Toaster rich-colors />
     </div>
   </div>
 </template>
