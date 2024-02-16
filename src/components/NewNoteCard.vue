@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { X } from 'lucide-vue-next'
 
 import { 
@@ -8,7 +9,29 @@ import {
   DialogPortal, 
   DialogRoot, 
   DialogTrigger 
-} from 'radix-vue';
+} from 'radix-vue'
+
+const shouldShowOnboarding = ref(true)
+const content = ref<string>()
+
+const handleStartEditor = () => {
+    shouldShowOnboarding.value = false
+}
+
+const handleContentChanged = (event: any) => {
+    const { value: textareaValue } = event.target
+    content.value = textareaValue
+
+    if (textareaValue === '') {
+        shouldShowOnboarding.value = true
+    }
+}
+
+const handleSaveNote = (event: any) => {
+    event.preventDefault()
+
+    console.log(content.value)
+}
 </script>
 
 <template>
@@ -31,22 +54,39 @@ import {
                     <X class="size-5" />
                 </DialogClose>
 
-                <div class="flex flex-1 flex-col gap-3 p-5">
-                    <span class="text-sm font-medium text-slate-300">
-                        Adicionar nota
-                    </span>
-                    
-                    <p class="text-sm leading-6 text-slate-400 h-full">
-                        Comece <button class="font-medium text-lime-400 hover:underline">gravando uma nota</button> em áudio ou se preferir <button class="font-medium text-lime-400 hover:underline">utilize apenas texto</button>.
-                    </p>
-                </div>
-
-                <button 
-                    type="button"
-                    class="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
-                >
-                    Salvar nota
-                </button>
+                <form @submit="handleSaveNote" class="flex flex-col flex-1">
+                    <div class="flex flex-1 flex-col gap-3 p-5">
+                        <span class="text-sm font-medium text-slate-300">
+                            Adicionar nota
+                        </span>
+                        
+                        <p v-if="shouldShowOnboarding" class="text-sm leading-6 text-slate-400 h-full">
+                            Comece 
+                            <button class="font-medium text-lime-400 hover:underline">
+                                gravando uma nota
+                            </button> 
+                            em áudio ou se preferir 
+                            <button @click="handleStartEditor" class="font-medium text-lime-400 hover:underline">
+                                utilize apenas texto
+                            </button>.
+                        </p>
+    
+                        <textarea
+                            v-else 
+                            autofocus 
+                            placeholder="Digite aqui..."
+                            class="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
+                            @input="handleContentChanged"
+                        />
+                    </div>
+    
+                    <button 
+                        type="submit"
+                        class="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
+                    >
+                        Salvar nota
+                    </button>
+                </form>
             </DialogContent>
         </DialogPortal>
     </DialogRoot>
