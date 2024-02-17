@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Toaster } from 'vue-sonner'
 
 import logo from './assets/logo-nlw.svg'
@@ -13,6 +13,8 @@ interface Note {
 }
 
 const notes = ref<Note[]>([])
+const filteredNotes = ref<Note[]>([])
+const search = ref('')
 
 const onNoteCreated = (content: string) => {
   const newNote = { 
@@ -27,11 +29,31 @@ const onNoteCreated = (content: string) => {
   localStorage.setItem('notes', JSON.stringify(notesArray))
 }
 
+const handleSearch = (event: any) => {
+  const query = event.target.value
+  search.value = query
+}
+
+watch(
+  () => search.value,
+  (query) => {    
+    filteredNotes.value = query !== ''
+      ? notes.value.filter(note => note.content?.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+      : notes.value
+  }
+)
+
+watch(
+  () => notes.value,
+  (notes) => filteredNotes.value = notes
+)
+
 onMounted(() => {
   const notesOnStorage = localStorage.getItem('notes')
 
   if (notesOnStorage) {
     notes.value = JSON.parse(notesOnStorage)
+    filteredNotes.value = notes.value
   }
 })
 </script>
@@ -45,6 +67,7 @@ onMounted(() => {
         type="text" 
         placeholder="Busque em suas notas..." 
         class="bg-transparent w-full text-3xl font-semibold tracking-tight outline-none placeholder:text-slate-500"
+        @input="handleSearch"
       />
     </form>
 
@@ -54,7 +77,7 @@ onMounted(() => {
       <NewNoteCard :onNoteCreated="onNoteCreated" />
 
       <NoteCard 
-        v-for="note in notes"
+        v-for="note in filteredNotes"
         :key="note.id"
         :note="note" 
       />
