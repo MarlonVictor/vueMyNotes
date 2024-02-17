@@ -1,9 +1,39 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { Toaster } from 'vue-sonner'
 
 import logo from './assets/logo-nlw.svg'
 import NewNoteCard from './components/NewNoteCard.vue'
 import NoteCard from './components/NoteCard.vue'
+
+interface Note {
+  id: string,
+  date: Date,
+  content?: string
+}
+
+const notes = ref<Note[]>([])
+
+const onNoteCreated = (content: string) => {
+  const newNote = { 
+    id: crypto.randomUUID(), 
+    date: new Date, 
+    content
+  }
+
+  const notesArray = [newNote, ...notes.value]
+
+  notes.value = notesArray
+  localStorage.setItem('notes', JSON.stringify(notesArray))
+}
+
+onMounted(() => {
+  const notesOnStorage = localStorage.getItem('notes')
+
+  if (notesOnStorage) {
+    notes.value = JSON.parse(notesOnStorage)
+  }
+})
 </script>
 
 <template>
@@ -21,13 +51,12 @@ import NoteCard from './components/NoteCard.vue'
     <div class="h-px bg-slate-700" />
 
     <div class="grid grid-cols-3 auto-rows-[250px] gap-6">
-      <NewNoteCard />
+      <NewNoteCard :onNoteCreated="onNoteCreated" />
 
       <NoteCard 
-        :note="{
-          date: new Date,
-          content: 'O Drizzle possui um plugin do ESLint para evitar que realizemos updates ou deletes sem where...'
-        }" 
+        v-for="note in notes"
+        :key="note.id"
+        :note="note" 
       />
 
       <Toaster rich-colors />

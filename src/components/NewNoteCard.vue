@@ -12,6 +12,12 @@ import {
   DialogTrigger 
 } from 'radix-vue'
 
+interface NewNoteCardProps {
+    onNoteCreated: (content: string) => void
+}
+
+const { onNoteCreated } = defineProps<NewNoteCardProps>()
+
 const shouldShowOnboarding = ref(true)
 const content = ref<string>()
 
@@ -31,8 +37,16 @@ const handleContentChanged = (event: any) => {
 const handleSaveNote = (event: any) => {
     event.preventDefault()
 
-    console.log(content.value)
+    if (!content.value) {
+        toast.error('Digite algo na nota!')
+        return
+    }
+
+    onNoteCreated(content.value || '')
     toast.success('Nota criada com sucesso!')
+
+    content.value = ''
+    shouldShowOnboarding.value = true
 }
 </script>
 
@@ -78,6 +92,7 @@ const handleSaveNote = (event: any) => {
                             autofocus 
                             placeholder="Digite aqui..."
                             class="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
+                            :value="content"
                             @input="handleContentChanged"
                         />
                     </div>
