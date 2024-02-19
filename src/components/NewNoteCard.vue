@@ -19,7 +19,10 @@ interface NewNoteCardProps {
 const { onNoteCreated } = defineProps<NewNoteCardProps>()
 
 const shouldShowOnboarding = ref(true)
+const isRecording = ref(false)
 const content = ref<string>()
+
+let speechRecognition: SpeechRecognition | null = null
 
 const handleStartEditor = () => {
     shouldShowOnboarding.value = false
@@ -34,9 +37,7 @@ const handleContentChanged = (event: any) => {
     }
 }
 
-const handleSaveNote = (event: any) => {
-    event.preventDefault()
-
+const handleSaveNote = () => {
     if (!content.value) {
         toast.error('Digite algo na nota!')
         return
@@ -47,6 +48,47 @@ const handleSaveNote = (event: any) => {
 
     content.value = ''
     shouldShowOnboarding.value = true
+}
+
+const handleStartRecording = () => {
+    isRecording.value = true
+
+    const isSpeechRecognitionAPIAvailable = 'SpeechRecognition' in window
+        || 'webkitSpeechRecognition' in window
+
+    if (!isSpeechRecognitionAPIAvailable) {
+        toast.warning('Infelizmente seu navegador não suporta a API de gravação!')
+        isRecording.value = false
+        return
+    }
+
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
+    speechRecognition = new SpeechRecognitionAPI()
+
+    speechRecognition.lang = 'pt-BR'
+    speechRecognition.continuous = true
+    speechRecognition.maxAlternatives = 1
+    speechRecognition.interimResults = true
+
+    speechRecognition.onresult = (event) => {
+        const transcription = Array.from(event.results).reduce((text, result) => {
+            return text.concat(result[0].transcript)
+        }, '')        
+
+        content.value = transcription
+    }
+
+    speechRecognition.onerror = (event) => {
+        console.error(event)
+        toast.error('Ocorreu algum erro ao gravar')
+    }
+
+    speechRecognition.start()
+}
+
+const handleStopRecording = () => {
+    isRecording.value = false
+    speechRecognition?.stop()
 }
 </script>
 
@@ -70,7 +112,7 @@ const handleSaveNote = (event: any) => {
                     <X class="size-5" />
                 </DialogClose>
 
-                <form @submit="handleSaveNote" class="flex flex-col flex-1">
+                <form class="flex flex-col flex-1">
                     <div class="flex flex-1 flex-col gap-3 p-5">
                         <span class="text-sm font-medium text-slate-300">
                             Adicionar nota
@@ -78,11 +120,20 @@ const handleSaveNote = (event: any) => {
                         
                         <p v-if="shouldShowOnboarding" class="text-sm leading-6 text-slate-400 h-full">
                             Comece 
-                            <button class="font-medium text-lime-400 hover:underline">
+                            <button 
+                                type="button" 
+                                @click="handleStartRecording" 
+                                class="font-medium text-lime-400 hover:underline"
+                            >
                                 gravando uma nota
                             </button> 
+
                             em áudio ou se preferir 
-                            <button @click="handleStartEditor" class="font-medium text-lime-400 hover:underline">
+                            <button 
+                                type="button" 
+                                @click="handleStartEditor" 
+                                class="font-medium text-lime-400 hover:underline"
+                            >
                                 utilize apenas texto
                             </button>.
                         </p>
@@ -98,7 +149,18 @@ const handleSaveNote = (event: any) => {
                     </div>
     
                     <button 
-                        type="submit"
+                        v-if="isRecording"
+                        type="button"
+                        class="flex items-center justify-center gap-2 w-full bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
+                        @click="handleStopRecording"
+                    >
+                        <span class="size-3 rounded-full bg-red-500 animate-pulse" />
+                        Gravando! (clique p/ interromper)
+                    </button>
+                    <button 
+                        v-else
+                        type="button"
+                        @click="handleSaveNote"
                         class="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
                     >
                         Salvar nota
