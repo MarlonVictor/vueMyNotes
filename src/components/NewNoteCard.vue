@@ -107,7 +107,7 @@ const handleStopRecording = () => {
         <DialogPortal>
             <DialogOverlay class="inset-0 fixed bg-black/50" />
 
-            <DialogContent class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-[640px] h-[60vh] w-full bg-slate-700 rounded-md flex flex-col outline-none overflow-hidden">
+            <DialogContent class="fixed inset-0 md:inset-auto md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 md:max-w-[640px] md:h-[60vh] w-full bg-slate-700 md:rounded-md flex flex-col outline-none overflow-hidden">
                 <DialogClose class="absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 rounded-bl-md hover:text-slate-100">
                     <X class="size-5" />
                 </DialogClose>

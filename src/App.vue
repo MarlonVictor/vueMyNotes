@@ -59,7 +59,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto my-12 space-y-6">
+  <div class="max-w-6xl mx-auto my-12 space-y-6 px-5">
     <img :src="logo" alt="NLW Expert" />
 
     <form>
@@ -73,7 +73,7 @@ onMounted(() => {
 
     <div class="h-px bg-slate-700" />
 
-    <div class="grid grid-cols-3 auto-rows-[250px] gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-6">
       <NewNoteCard :onNoteCreated="onNoteCreated" />
 
       <NoteCard 
