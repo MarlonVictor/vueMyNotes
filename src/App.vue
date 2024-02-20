@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { Toaster } from 'vue-sonner'
+import { Toaster, toast } from 'vue-sonner'
 
 import logo from './assets/logo-nlw.svg'
 import NewNoteCard from './components/NewNoteCard.vue'
@@ -27,6 +27,15 @@ const onNoteCreated = (content: string) => {
 
   notes.value = notesArray
   localStorage.setItem('notes', JSON.stringify(notesArray))
+}
+
+const onNoteDeleted = (id: string) => {
+  const notesArray = notes.value.filter(note => note.id !== id)
+
+  notes.value = notesArray
+  localStorage.setItem('notes', JSON.stringify(notesArray))
+
+  toast.info('Nota deletada!')
 }
 
 const handleSearch = (event: any) => {
@@ -80,6 +89,7 @@ onMounted(() => {
         v-for="note in filteredNotes"
         :key="note.id"
         :note="note" 
+        :onNoteDeleted="onNoteDeleted"
       />
 
       <Toaster rich-colors />

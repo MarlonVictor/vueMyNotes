@@ -14,12 +14,14 @@ import {
 
 interface NoteCardProps {
     note: {
+        id: string,
         date: Date,
         content?: string
-    }
+    },
+    onNoteDeleted: (id: string) => void
 }
 
-const { note } = defineProps<NoteCardProps>()
+const { note, onNoteDeleted } = defineProps<NoteCardProps>()
 const dateConfig = { locale: ptBR, addSuffix: true }
 </script>
 
@@ -56,6 +58,7 @@ const dateConfig = { locale: ptBR, addSuffix: true }
                 </div>
 
                 <button 
+                    @click="() => onNoteDeleted(note.id)"
                     type="button"
                     class="w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group"
                 >

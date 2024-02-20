@@ -22,6 +22,8 @@ const shouldShowOnboarding = ref(true)
 const isRecording = ref(false)
 const content = ref<string>()
 
+const openDialog = ref(false)
+
 let speechRecognition: SpeechRecognition | null = null
 
 const handleStartEditor = () => {
@@ -48,6 +50,7 @@ const handleSaveNote = () => {
 
     content.value = ''
     shouldShowOnboarding.value = true
+    openDialog.value = false
 }
 
 const handleStartRecording = () => {
@@ -93,7 +96,7 @@ const handleStopRecording = () => {
 </script>
 
 <template>
-    <DialogRoot>
+    <DialogRoot v-model:open="openDialog">
         <DialogTrigger class="rounded-md bg-slate-700 text-left p-5 gap-y-3 overflow-hidden relative flex flex-col outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
             <span class="text-sm font-medium text-slate-200">
                 Adicionar nota
