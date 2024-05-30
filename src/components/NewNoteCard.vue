@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { X } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
@@ -93,19 +93,69 @@ const handleStopRecording = () => {
     isRecording.value = false
     speechRecognition?.stop()
 }
+
+onMounted(() => {
+    document.addEventListener('keydown', (ev) => {
+        if (ev.ctrlKey &&  ev.key === 'q') {
+            ev.preventDefault()
+            handleSaveNote()
+        }
+    });
+})
 </script>
 
 <template>
     <DialogRoot v-model:open="openDialog">
-        <DialogTrigger class="rounded-md bg-slate-700 text-left p-5 gap-y-3 overflow-hidden relative flex flex-col outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-            <span class="text-sm font-medium text-slate-200">
-                Adicionar nota
-            </span>
+        <div class="rounded-md bg-slate-700 text-left overflow-hidden relative flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-lime-400">
+            <form class="flex flex-col flex-1">
+                <div class="flex flex-col gap-y-3 p-5 flex-1">
+                    <span class="text-sm font-medium text-slate-200">
+                        Adicionar nota
+                    </span>
+        
+                    <p 
+                        v-if="shouldShowOnboarding" 
+                        @click="handleStartEditor" 
+                        class="text-sm leading-6 text-slate-400 flex-1"
+                    >
+                        Escreva seus pensamentos ou grave uma 
+                        <span class="underline cursor-pointer" @click="handleStartRecording">nota em áudio</span>.
+                    </p>
 
-            <p class="text-sm leading-6 text-slate-400">
-                Grave uma nota em áudio que será convertida para texto automaticamente.
-            </p>
-        </DialogTrigger>
+                    <textarea
+                        v-else 
+                        autofocus 
+                        placeholder="Digite aqui..."
+                        class="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
+                        :value="content"
+                        @input="handleContentChanged"
+                    />
+                </div>
+
+                <button 
+                    v-if="isRecording"
+                    type="button"
+                    class="flex items-center justify-center gap-2 w-full bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium border-b border-x border-slate-800 rounded-b-md hover:text-slate-100"
+                    @click="handleStopRecording"
+                >
+                    <span class="size-3 rounded-full bg-red-500 animate-pulse" />
+                    Gravando! (clique p/ interromper)
+                </button>
+
+                <DialogTrigger 
+                    v-else
+                    type="button"
+                    class="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
+                >
+                    <span class="group-hover:hidden">
+                        Aperte CMD + Q p/ salvar
+                    </span>
+                    <span class="hidden group-hover:block">
+                        Abrir modal
+                    </span>
+                </DialogTrigger>
+            </form>
+        </div>
 
         <DialogPortal>
             <DialogOverlay class="inset-0 fixed bg-black/50" />

@@ -38,11 +38,6 @@ const onNoteDeleted = (id: string) => {
   toast.info('Nota deletada!')
 }
 
-const handleSearch = (event: any) => {
-  const query = event.target.value
-  search.value = query
-}
-
 watch(
   () => search.value,
   (query) => {    
@@ -68,15 +63,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto my-12 space-y-6 px-5">
-    <img :src="logo" alt="NLW Expert" />
+  <div class="max-w-6xl mx-auto my-12 space-y-6 px-5 relative">
+    <img 
+      :src="logo" 
+      alt="NLW Expert" 
+      class="xl:absolute xl:-left-28 xl:top-16 xl:-rotate-90 xl:w-40"
+    />
 
     <form>
       <input 
+        v-model="search"
         type="text" 
         placeholder="Busque em suas notas..." 
         class="bg-transparent w-full text-3xl font-semibold tracking-tight outline-none placeholder:text-slate-500"
-        @input="handleSearch"
       />
     </form>
 
