@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { X } from 'lucide-vue-next'
-import { toast } from 'vue-sonner'
+import { ArrowUpRight, X } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
+import { toast } from 'vue-sonner';
 
-import { 
-  DialogClose, 
-  DialogContent, 
-  DialogOverlay, 
-  DialogPortal, 
-  DialogRoot, 
-  DialogTrigger 
-} from 'radix-vue'
+import {
+    DialogClose,
+    DialogContent,
+    DialogOverlay,
+    DialogPortal,
+    DialogRoot,
+    DialogTrigger
+} from 'radix-vue';
 
 interface NewNoteCardProps {
     onNoteCreated: (content: string) => void
@@ -108,6 +108,13 @@ onMounted(() => {
     <DialogRoot v-model:open="openDialog">
         <div class="rounded-md bg-slate-700 text-left overflow-hidden relative flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-lime-400">
             <form class="flex flex-col flex-1">
+                <DialogTrigger
+                    type="button"
+                    class="bg-slate-800 w-max p-1.5 absolute top-0 right-0 text-slate-300 hover:text-slate-100 rounded-bl-md"
+                >
+                    <ArrowUpRight class="size-5" />
+                </DialogTrigger>
+
                 <div class="flex flex-col gap-y-3 p-5 flex-1">
                     <span class="text-sm font-medium text-slate-200">
                         Adicionar nota
@@ -142,18 +149,9 @@ onMounted(() => {
                     Gravando! (clique p/ interromper)
                 </button>
 
-                <DialogTrigger 
-                    v-else
-                    type="button"
-                    class="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
-                >
-                    <span class="group-hover:hidden">
-                        Aperte CMD + Q p/ salvar
-                    </span>
-                    <span class="hidden group-hover:block">
-                        Abrir modal
-                    </span>
-                </DialogTrigger>
+                <span v-else class="w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium cursor-default">
+                    Aperte CMD + Q p/ salvar
+                </span>
             </form>
         </div>
 
